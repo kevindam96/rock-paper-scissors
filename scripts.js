@@ -5,27 +5,29 @@ function game() {
   let playerScore = 0;
   let computerScore = 0;
   for (i = 0; i < 5; i++) {
-    let playerSelection = prompt("Rock, paper, or scissors?\n").toLowerCase().trim();
-    while ((playerSelection !== "rock") && 
-        (playerSelection !== "paper") && 
-        (playerSelection !== "scissors")) {
-      playerSelection = prompt("Invalid selection. Please try again. Rock, paper, or scissors?\n");
+    let playerSelection = prompt("Game " + (i + 1).toString() + " of 5: " + 
+        "Rock, paper, or scissors?\n").toLowerCase().trim();
+    while (!isValidSelection(playerSelection)) {
+      playerSelection = prompt("Invalid selection. Please try again. Rock, paper, or scissors?\n").toLowerCase().trim();
     }
     let result = playRound(playerSelection, computerPlay());
     console.log(result);
-    if (result.indexOf("You Win!") >= 0) {
+    if (playerWon(result)) {
       playerScore++;
-    } else if (result.indexOf("You Lose!") >= 0) {
+    } else if (playerLost(result)) {
       computerScore++;
     }
     console.log("Player score: " + playerScore.toString());
     console.log("Computer score: " + computerScore.toString());
   }
   if (playerScore > computerScore) {
+    alert("You win!");
     console.log("You win!");
   } else if (computerScore > playerScore) {
+    alert("You lose!");
     console.log("You lose!");
   } else {
+    alert("It's a Tie!");
     console.log("It's a Tie!");
   }
 }
@@ -39,14 +41,10 @@ function game() {
 function playRound(playerSelection, computerSelection) {
   playerSelection = playerSelection.toLowerCase().trim();
   computerSelection = computerSelection.toLowerCase().trim();
-  if (playerSelection !== "rock" && 
-      playerSelection !== "paper" && 
-      playerSelection !== "scissors") {
+  if (!isValidSelection(playerSelection)) {
     throw "Invalid player selection";
   }
-  if (computerSelection !== "rock" && 
-      computerSelection !== "paper" && 
-      computerSelection !== "scissors") {
+  if (!isValidSelection(computerSelection)) {
     throw "Invalid computer selection";
   }
   if (playerSelection === "rock" && computerSelection === "rock") {
@@ -70,6 +68,20 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 module.exports = playRound;
+
+function isValidSelection(selection) {
+  return selection === "rock" || 
+      selection === "paper" || 
+      selection === "scissors";
+}
+
+function playerWon(result) {
+  return result.indexOf("You Win!") >= 0;
+}
+
+function playerLost(result) {
+  return result.indexOf("You Lose!") >= 0;
+}
 
 /**
  * Randomly return either "Rock", "Paper", or "Scissors"

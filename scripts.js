@@ -5,10 +5,10 @@ function game() {
   let playerScore = 0;
   let computerScore = 0;
   for (i = 0; i < 5; i++) {
-    let playerSelection = prompt("Rock, paper, or scissors?\n").toLowerCase();
+    let playerSelection = prompt("Rock, paper, or scissors?\n").toLowerCase().trim();
     while ((playerSelection !== "rock") && 
-          (playerSelection !== "paper") && 
-          (playerSelection !== "scissors")) {
+      (playerSelection !== "paper") && 
+      (playerSelection !== "scissors")) {
       playerSelection = prompt("Invalid selection. Please try again. Rock, paper, or scissors?\n");
     }
     let result = playRound(playerSelection, computerPlay());
@@ -37,12 +37,16 @@ function game() {
  * @return {String}                   winner declaration
  */
 function playRound(playerSelection, computerSelection) {
-  playerSelection = playerSelection.toLowerCase();
-  computerSelection = computerSelection.toLowerCase();
-  if (playerSelection !== "rock" && playerSelection !== "paper" && playerSelection !== "scissors") {
+  playerSelection = playerSelection.toLowerCase().trim();
+  computerSelection = computerSelection.toLowerCase().trim();
+  if (playerSelection !== "rock" && 
+    playerSelection !== "paper" && 
+    playerSelection !== "scissors") {
     throw "Invalid player selection";
   }
-  if (computerSelection !== "rock" && computerSelection !== "paper" && computerSelection !== "scissors") {
+  if (computerSelection !== "rock" && 
+    computerSelection !== "paper" && 
+    computerSelection !== "scissors") {
     throw "Invalid computer selection";
   }
   if (playerSelection === "rock" && computerSelection === "rock") {

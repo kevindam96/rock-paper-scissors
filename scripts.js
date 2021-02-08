@@ -1,4 +1,4 @@
-game();
+window.onload = game();
 
 function game() {
   let [playerScore, computerScore] = playFiveWinningRounds();

@@ -1,25 +1,9 @@
-/**
- * Play five rounds of Rock Paper Scissors and announce the result
- */
 function game() {
-  let playerScore = 0;
-  let computerScore = 0;
-  for (i = 0; i < 5; i++) {
-    let playerSelection = prompt("Game " + (i + 1).toString() + " of 5: " + 
-        "Rock, paper, or scissors?\n").toLowerCase().trim();
-    while (!isValidSelection(playerSelection)) {
-      playerSelection = prompt("Invalid selection. Please try again. Rock, paper, or scissors?\n").toLowerCase().trim();
-    }
-    let result = playRound(playerSelection, computerPlay());
-    console.log(result);
-    if (playerWon(result)) {
-      playerScore++;
-    } else if (playerLost(result)) {
-      computerScore++;
-    }
-    console.log("Player score: " + playerScore.toString());
-    console.log("Computer score: " + computerScore.toString());
-  }
+  let [playerScore, computerScore] = playFiveWinningRounds();
+  announceWinner(playerScore, computerScore);
+}
+
+function announceWinner(playerScore, computerScore) {
   if (playerScore > computerScore) {
     alert("You win!");
     console.log("You win!");
@@ -30,6 +14,37 @@ function game() {
     alert("It's a Tie!");
     console.log("It's a Tie!");
   }
+}
+
+function playFiveWinningRounds() {
+  let playerScore = 0;
+  let computerScore = 0;
+  while (playerScore + computerScore < 5) {
+    let playerSelection = getPlayerSelection();
+    let result = playRound(playerSelection, computerPlay());
+    console.log(result);
+    [playerScore, computerScore] = updateScore(result, playerScore, computerScore);
+    console.log("Player score: " + playerScore.toString());
+    console.log("Computer score: " + computerScore.toString());
+  }
+  return [playerScore, computerScore];
+}
+
+function getPlayerSelection() {
+  let playerSelection = prompt("Rock, paper, or scissors?\n").toLowerCase().trim();
+  while (!isValidSelection(playerSelection)) {
+    playerSelection = prompt("Invalid selection. Please try again. Rock, paper, or scissors?\n").toLowerCase().trim();
+  }
+  return playerSelection;
+}
+
+function updateScore(result, playerScore, computerScore) {
+  if (playerWon(result)) {
+    playerScore++;
+  } else if (playerLost(result)) {
+    computerScore++;
+  }
+  return [playerScore, computerScore];
 }
 
 /**
@@ -47,6 +62,11 @@ function playRound(playerSelection, computerSelection) {
   if (!isValidSelection(computerSelection)) {
     throw "Invalid computer selection";
   }
+  return determineWinner(playerSelection, computerSelection);
+}
+module.exports = playRound;
+
+function determineWinner(playerSelection, computerSelection) {
   if (playerSelection === "rock" && computerSelection === "rock") {
     return "It's a Tie! Rock ties with Rock";
   } else if(playerSelection === "rock" && computerSelection === "paper") {
@@ -67,7 +87,6 @@ function playRound(playerSelection, computerSelection) {
     return "It's a Tie! Scissors ties with Scissors";
   }
 }
-module.exports = playRound;
 
 function isValidSelection(selection) {
   return selection === "rock" || 

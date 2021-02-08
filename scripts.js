@@ -1,27 +1,38 @@
 function game() {
   let [playerScore, computerScore] = playFiveWinningRounds();
-  announceWinner(playerScore, computerScore);
+  if (playerScore !== null && computerScore !== null) {
+    announceWinner(playerScore, computerScore);
+  }
 }
 
 function announceWinner(playerScore, computerScore) {
+  let message = ""
   if (playerScore > computerScore) {
-    alert("You win!");
-    console.log("You win!");
+    message = "You win!\n\n" + "Player Score: " + playerScore.toString() + "\n" + 
+        "Computer Score: " + computerScore.toString();
   } else if (computerScore > playerScore) {
-    alert("You lose!");
-    console.log("You lose!");
+    message = "You lose!\n\n" + "Player Score: " + playerScore.toString() + "\n" + 
+    "Computer Score: " + computerScore.toString();
   } else {
-    alert("It's a Tie!");
-    console.log("It's a Tie!");
+    message = "It's a Tie!\n\n" + "Player Score: " + playerScore.toString() + "\n" + 
+    "Computer Score: " + computerScore.toString();
   }
+  alert(message);
+  console.log(message);
 }
 
 function playFiveWinningRounds() {
   let playerScore = 0;
   let computerScore = 0;
   while (playerScore + computerScore < 5) {
-    let playerSelection = getPlayerSelection();
+    let playerSelection = getPlayerSelection(playerScore, computerScore);
+    if (typeof(playerSelection) === "undefined" || !playerSelection) {
+      console.log("Player score: " + playerScore.toString());
+      console.log("Computer score: " + computerScore.toString());
+      return [playerScore, computerScore];
+    }
     let result = playRound(playerSelection, computerPlay());
+    alert(result);
     console.log(result);
     [playerScore, computerScore] = updateScore(result, playerScore, computerScore);
     console.log("Player score: " + playerScore.toString());
@@ -30,10 +41,17 @@ function playFiveWinningRounds() {
   return [playerScore, computerScore];
 }
 
-function getPlayerSelection() {
-  let playerSelection = prompt("Rock, paper, or scissors?\n").toLowerCase().trim();
+function getPlayerSelection(playerScore, computerScore) {
+  let playerSelection = prompt("Player Score: " + playerScore.toString() + "\n" +
+      "Computer Score: " + computerScore.toString() + "\n\n" +
+      "Rock, paper, or scissors?\n");
   while (!isValidSelection(playerSelection)) {
-    playerSelection = prompt("Invalid selection. Please try again. Rock, paper, or scissors?\n").toLowerCase().trim();
+    playerSelection = prompt("Invalid selection. Please try again.\n\n" + 
+        "Rock, paper, or scissors?\n\n" + 
+        "Press \"OK\" or \"Cancel\" to end the game early.");
+    if (typeof(playerSelection) === "undefined" || !playerSelection) {
+      return;
+    }
   }
   return playerSelection;
 }
@@ -89,6 +107,10 @@ function determineWinner(playerSelection, computerSelection) {
 }
 
 function isValidSelection(selection) {
+  if (typeof(selection) === "undefined" || !selection) {
+    return false;
+  }
+  selection = selection.toLowerCase().trim();
   return selection === "rock" || 
       selection === "paper" || 
       selection === "scissors";

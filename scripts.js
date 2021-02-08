@@ -1,3 +1,5 @@
+game();
+
 function game() {
   let [playerScore, computerScore] = playFiveWinningRounds();
   if (playerScore !== null && computerScore !== null) {

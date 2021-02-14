@@ -1,71 +1,11 @@
-window.onload = game;
-
-function game() {
-  let [playerScore, computerScore] = playFiveWinningRounds();
-  if (playerScore !== null && computerScore !== null) {
-    announceWinner(playerScore, computerScore);
-  }
-}
-
-function announceWinner(playerScore, computerScore) {
-  let message = ""
-  if (playerScore > computerScore) {
-    message = "You win!\n\n" + "Player Score: " + playerScore.toString() + "\n" + 
-        "Computer Score: " + computerScore.toString();
-  } else if (computerScore > playerScore) {
-    message = "You lose!\n\n" + "Player Score: " + playerScore.toString() + "\n" + 
-    "Computer Score: " + computerScore.toString();
-  } else {
-    message = "It's a Tie!\n\n" + "Player Score: " + playerScore.toString() + "\n" + 
-    "Computer Score: " + computerScore.toString();
-  }
-  alert(message);
-  console.log(message);
-}
-
-function playFiveWinningRounds() {
-  let playerScore = 0;
-  let computerScore = 0;
-  while (playerScore + computerScore < 5) {
-    let playerSelection = getPlayerSelection(playerScore, computerScore);
-    if (typeof(playerSelection) === "undefined" || !playerSelection) {
-      console.log("Player score: " + playerScore.toString());
-      console.log("Computer score: " + computerScore.toString());
-      return [playerScore, computerScore];
-    }
-    let result = playRound(playerSelection, computerPlay());
-    alert(result);
-    console.log(result);
-    [playerScore, computerScore] = updateScore(result, playerScore, computerScore);
-    console.log("Player score: " + playerScore.toString());
-    console.log("Computer score: " + computerScore.toString());
-  }
-  return [playerScore, computerScore];
-}
-
-function getPlayerSelection(playerScore, computerScore) {
-  let playerSelection = prompt("Player Score: " + playerScore.toString() + "\n" +
-      "Computer Score: " + computerScore.toString() + "\n\n" +
-      "Rock, paper, or scissors?\n");
-  while (!isValidSelection(playerSelection)) {
-    playerSelection = prompt("Invalid selection. Please try again.\n\n" + 
-        "Rock, paper, or scissors?\n\n" + 
-        "Press \"OK\" or \"Cancel\" to end the game early.");
-    if (typeof(playerSelection) === "undefined" || !playerSelection) {
-      return;
-    }
-  }
-  return playerSelection;
-}
-
-function updateScore(result, playerScore, computerScore) {
-  if (playerWon(result)) {
-    playerScore++;
-  } else if (playerLost(result)) {
-    computerScore++;
-  }
-  return [playerScore, computerScore];
-}
+const score = document.querySelector("#score");
+const status = document.querySelector("#message");
+const buttons = document.querySelectorAll("button");
+buttons.forEach(button => {
+  button.addEventListener("click", () => {
+    playRound(button.textContent);
+  })
+});
 
 /**
  * Play a round of Rock Paper Scissors
@@ -73,18 +13,33 @@ function updateScore(result, playerScore, computerScore) {
  * @param  {String} computerSelection one of (case-insensitive): "Rock", "Paper", "Scissors"
  * @return {String}                   winner declaration
  */
-function playRound(playerSelection, computerSelection) {
+function playRound(playerSelection) {
   playerSelection = playerSelection.toLowerCase().trim();
-  computerSelection = computerSelection.toLowerCase().trim();
+  computerSelection = computerPlay().toLowerCase().trim();
   if (!isValidSelection(playerSelection)) {
     throw "Invalid player selection";
   }
   if (!isValidSelection(computerSelection)) {
     throw "Invalid computer selection";
   }
+  let result = determineWinner(playerSelection, computerSelection);
+  status.textContent = result;
+  updateScore(result);
   return determineWinner(playerSelection, computerSelection);
 }
-module.exports = playRound;
+
+function updateScore(result) {
+  let scores = score.textContent.split("-");
+  let playerScore = Number(scores[0].trim());
+  let computerScore = Number(scores[1].trim());
+  if (playerWon(result)) {
+    playerScore++;
+  } else if (playerLost(result)) {
+    computerScore++;
+  }
+  score.textContent = playerScore.toString() + 
+      " - " + computerScore.toString();
+}
 
 function determineWinner(playerSelection, computerSelection) {
   if (playerSelection === "rock" && computerSelection === "rock") {

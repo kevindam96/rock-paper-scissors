@@ -1,0 +1,109 @@
+html {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+}
+
+/* Layout */
+.grid {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  grid-template: 
+    ".    title title title    ." auto
+    ".    .     .     .        ." 4rem
+    ".    rock  paper scissors ." 5rem
+    ".    .     .     .        ." 3rem
+    ".    playr score comp     ." auto 
+    ".    msg   msg   msg      ." auto
+    ".    .     .     .        ." auto /
+     1fr  1fr   1fr   1fr      1fr;
+  grid-gap: 1rem;
+  height: 100%;
+  width: 100%;
+}
+@media (max-width: 700px) {
+  .grid {
+    grid-template: 
+    ".   title     ."
+    ".   rock      ." 5rem
+    ".   paper     ." 5rem
+    ".   scissors  ." 5rem 
+    ".   score     ." 5rem 
+    ".   msg       ." auto/
+     1fr 1fr       1fr;
+  }
+  #player,
+  #computer {
+    display: none;
+  }
+}
+
+/* Title */
+#title {
+  grid-area: title;
+  justify-self: center;
+  font-size: 32pt;
+  font-family: 'Source Serif Pro', serif;
+}
+
+/* Rock Paper Scissors Buttons */
+button {
+  cursor: pointer;
+  font-size: 18pt;
+  font-family: 'Source Sans Pro', sans-serif;
+  border-radius: 12px;
+  border: solid;
+  border-width: 1px;
+  user-select: none;
+}
+button:focus {
+  outline: none;
+}
+#rock {
+  grid-area: rock;
+  color: rgba(200, 0, 0, 1);
+  background-color: rgba(229, 173, 173, 0.5);
+}
+#paper {
+  grid-area: paper;
+  color: rgba(0, 80, 0, 1);
+  background-color: rgba(173, 229, 173, 0.5);
+}
+#scissors {
+  grid-area: scissors;
+  color: rgba(0, 0, 200, 1);
+  background-color: rgba(173, 173, 229, 0.5);
+}
+
+/* Score and Status Message  */
+#player {
+  grid-area: playr;
+  justify-self: center;
+  align-self: center;
+  font-size: 18pt;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+#computer {
+  grid-area: comp;
+  justify-self: center;
+  align-self: center;
+  font-size: 18pt;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+#score {
+  grid-area: score;
+  justify-self: center;
+  font-size: 24pt;
+  font-family: 'Source Sans Pro', sans-serif;
+}
+#message {
+  grid-area: msg;
+  justify-self: center;
+  font-size: 20pt;
+  font-family: 'Source Sans Pro', sans-serif;
+}

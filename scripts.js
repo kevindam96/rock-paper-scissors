@@ -25,7 +25,6 @@ function playRound(playerSelection) {
   let result = determineWinner(playerSelection, computerSelection);
   status.textContent = result;
   updateScore(result);
-  return determineWinner(playerSelection, computerSelection);
 }
 
 function updateScore(result) {

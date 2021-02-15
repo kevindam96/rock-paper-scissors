@@ -15,7 +15,7 @@ buttons.forEach(button => {
  */
 function playRound(playerSelection) {
   playerSelection = playerSelection.toLowerCase().trim();
-  computerSelection = computerPlay().toLowerCase().trim();
+  let computerSelection = computerPlay().toLowerCase().trim();
   if (!isValidSelection(playerSelection)) {
     throw "Invalid player selection";
   }
